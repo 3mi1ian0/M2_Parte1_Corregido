@@ -3,6 +3,15 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Matriz de confusión
+from sklearn.metrics import confusion_matrix
+import seaborn as sns  # Para visualizar la matriz de confusión de una manera más clara
+
+from sklearn.metrics import precision_score
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+
 # Función sigmoide: 
 # Esta función mapea cualquier valor a un valor entre 0 y 1, lo que la hace útil para modelos de probabilidad.
 def sigmoid(z):
@@ -75,15 +84,17 @@ X_test = add_ones(X_test)
 
 # Inicialización de parámetros
 m_b = np.zeros(X_train.shape[1])
-alpha = 0.1  # Tasa de aprendizaje
-epochs = 5000  # Número de iteraciones
+alpha = 0.05  # Tasa de aprendizaje
+epochs = 5000 # Número de iteraciones
 
 cost_history = []
+cost_history_test = []  # Nueva lista para almacenar el historial de pérdida del conjunto de prueba
 
 # Bucle principal de entrenamiento
 for _ in range(epochs):
     m_b = gradient_descent(m_b, X_train, y_train, alpha)
     cost_history.append(cost(m_b, X_train, y_train))
+    cost_history_test.append(cost(m_b, X_test, y_test))  # Calcula y almacena la pérdida del conjunto de prueba
 
 # Predicciones para el conjunto de entrenamiento
 y_train_pred = [1 if hyp(m_b, x) >= 0.5 else 0 for x in X_train]
@@ -105,10 +116,32 @@ print(f"Training Error: {train_error * 100:.6f}%")
 print(f"Test Accuracy: {test_accuracy * 100:.6f}%")
 print(f"Test Error: {test_error * 100:.6f}%")
 
+print("Accuracy_Score: ", accuracy_score(y_test, y_test_pred))
+print("Precision_score: ", precision_score(y_test, y_test_pred))
+print("Recall_score: ", recall_score(y_test, y_test_pred))
+print("F1_score: ", f1_score(y_test, y_test_pred))
+
 # Gráfica de cómo cambia la función de pérdida durante el entrenamiento
 plt.figure()
 plt.plot(cost_history)
-plt.title("Función de Pérdida a lo largo de las Épocas")
+plt.title("Función de Pérdida a lo largo de las Épocas (TRAIN)")
 plt.xlabel("Épocas")
 plt.ylabel("Pérdida")
 plt.show()
+
+# Gráfica de cómo cambia la función de pérdida del conjunto de prueba durante el entrenamiento
+plt.figure()
+plt.plot(cost_history_test, color='red')  # Usaré el color rojo para diferenciar, pero puedes cambiarlo
+plt.title("Función de Pérdida a lo largo de las Épocas (TEST)")
+plt.xlabel("Épocas")
+plt.ylabel("Pérdida")
+plt.show()
+
+cm = confusion_matrix(y_test, y_test_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='g', cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Matriz de Confusión')
+plt.show()
+
