@@ -15,9 +15,10 @@ En este repositorio se encuentran los siguiente documentos:
  - Iris.csv es el dataset a utilizar
  - Gradient_Descent_100.py
  - Gradient_Descent_X.py
+
 Estos dos archivos tienen implementados el mismo codigo, con la diferencia de que se ajustaron los valores de learning rate y epochs para realizar un analisis y comparacion de como se ve afectado.
 Esto se explica mas a detalle en el siguiente documento:
- - DOCUMENTACION.pdf
+ - M2_Parte1_DOCUMENTACION_A01706083.pdf
 
 
 
